@@ -518,8 +518,44 @@
       </button>
     </div>
   </div>
+  <!-- --- Checkout Details Modal --- -->
+  <div class="checkout-backdrop" id="checkout-backdrop"></div>
+  <div class="checkout-modal" id="checkout-modal">
+    <div class="checkout-modal-header">
+      <h3>填寫訂購資料 ✍️</h3>
+      <button class="checkout-close-btn" id="checkout-modal-close" aria-label="關閉視窗"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form class="checkout-form" id="checkout-form" onsubmit="event.preventDefault();">
+      <div class="form-group">
+        <label for="checkout-name">收件人姓名 <span style="color:#FF7B7B;">*</span></label>
+        <input type="text" id="checkout-name" class="form-control" placeholder="請輸入收件人姓名" required>
+      </div>
+      <div class="form-group">
+        <label for="checkout-email">電子信箱 <span style="color:#FF7B7B;">*</span></label>
+        <input type="email" id="checkout-email" class="form-control" placeholder="請輸入電子信箱" required>
+      </div>
+      <div class="form-group">
+        <label for="checkout-phone">聯絡電話 <span style="color:#FF7B7B;">*</span></label>
+        <input type="tel" id="checkout-phone" class="form-control" placeholder="請輸入聯絡電話" required>
+      </div>
+      <div class="form-group">
+        <label for="checkout-message">備註與特殊需求</label>
+        <textarea id="checkout-message" class="form-control" placeholder="例如：我想指定送貨時段，或是備註客製規格..."></textarea>
+      </div>
+      
+      <div class="checkout-summary">
+        <div class="checkout-summary-row">
+          <span>商品總金額</span>
+          <span class="checkout-total-price" id="checkout-total-display">NT$ 0</span>
+        </div>
+      </div>
 
-
+      <div class="checkout-actions">
+        <button type="button" class="btn-cute btn-secondary" id="checkout-modal-cancel">返回購物籃</button>
+        <button type="submit" class="btn-cute" id="btn-submit-order">確認送出訂單 <i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </form>
+  </div>
 
   <!-- --- Toast Notification Container --- -->
   <div class="toast-container" id="toast-container"></div>

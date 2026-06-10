@@ -98,6 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const toastContainer = document.getElementById('toast-container');
   const checkoutBtn = document.getElementById('btn-checkout');
 
+  // Checkout Modal DOM Elements
+  const checkoutModal = document.getElementById('checkout-modal');
+  const checkoutBackdrop = document.getElementById('checkout-backdrop');
+  const checkoutModalClose = document.getElementById('checkout-modal-close');
+  const checkoutModalCancel = document.getElementById('checkout-modal-cancel');
+  const checkoutForm = document.getElementById('checkout-form');
+  const checkoutTotalDisplay = document.getElementById('checkout-total-display');
+
 
   // ==================== INITIALIZATION ====================
   function init() {
@@ -404,15 +412,89 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3000);
   }
 
-  // Checkout alert simulation
+  // Toggle Checkout Modal
+  function toggleCheckoutModal(isOpen) {
+    if (isOpen) {
+      checkoutModal.classList.add('open');
+      checkoutBackdrop.classList.add('open');
+      
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      checkoutTotalDisplay.textContent = `NT$ ${totalPrice}`;
+    } else {
+      checkoutModal.classList.remove('open');
+      checkoutBackdrop.classList.remove('open');
+    }
+  }
+
+  // Open Checkout Modal
   checkoutBtn.addEventListener('click', () => {
     if (cart.length === 0) return;
-    
-    alert('🎉 感謝您的訂購模擬！\n\n「星沐手作」為展示網站，此步驟代表訂購流程已成功串接！後續可透過官方 LINE 傳送您的訂單與規格喔～ (❁´◡`❁)');
-    cart = [];
-    saveCart();
-    updateCartUI();
-    toggleCart();
+    toggleCart(); // Close cart drawer
+    toggleCheckoutModal(true); // Open checkout modal
+  });
+
+  // Close Checkout Modal Events
+  checkoutModalClose.addEventListener('click', () => toggleCheckoutModal(false));
+  checkoutModalCancel.addEventListener('click', () => toggleCheckoutModal(false));
+  checkoutBackdrop.addEventListener('click', () => toggleCheckoutModal(false));
+
+  // Handle Order Form Submission via AJAX
+  checkoutForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('checkout-name').value;
+    const email = document.getElementById('checkout-email').value;
+    const phone = document.getElementById('checkout-phone').value;
+    const message = document.getElementById('checkout-message').value;
+
+    const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+    const orderData = {
+      customer_name: name,
+      customer_email: email,
+      customer_phone: phone,
+      customer_message: message,
+      total_price: totalPrice,
+      items: cart
+    };
+
+    const submitBtn = document.getElementById('btn-submit-order');
+    const originalBtnHtml = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '送出中... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+    fetch('submit_order.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(orderData)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert(`🎉 訂單送出成功！\n\n您的訂單編號為：#${data.order_id}\n\n我們已記錄您的資料，並發送明細至 ${email}，您也可以透過官方 LINE 傳送您的訂單編號以加速出貨程序喔～ (❁´◡'◡)`);
+        
+        // Clear cart
+        cart = [];
+        saveCart();
+        updateCartUI();
+
+        // Reset form & close modal
+        checkoutForm.reset();
+        toggleCheckoutModal(false);
+      } else {
+        alert(`❌ 訂單送出失敗：\n\n${data.message}`);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('❌ 網路連線異常，無法提交訂單，請稍後再試！');
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnHtml;
+    });
   });
 
   // Contact form submission response
