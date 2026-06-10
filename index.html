@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>星沐手作 | 童趣插畫風手作官方網站 & 線上訂購</title>
+  <meta name="title" content="星沐手作 | 童趣插畫風手作官方網站 & 線上訂購">
+  <meta name="description" content="星沐手作 (Starmu Handmade) - 用手作的溫度，編織童話般的美好日常。提供恐龍萬用拉鍊包、彈片口金包、手感捲軸杯套等童趣印花好物，支援線上即時客製模擬與訂購！">
+  <meta name="keywords" content="星沐手作, 手作包包, 恐龍拉鍊包, 彈片口金包, 杯套客製化, 寶寶口水巾, 手作職人, 韓系童趣插畫, 訂製布包">
+  <meta name="author" content="星沐手作 Starmu Handmade">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#FDFBF7">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://starmuhandmade.com/">
+  <meta property="og:title" content="星沐手作 | 童趣插畫風手作官方網站 & 線上訂購">
+  <meta property="og:description" content="用手作的溫度，編織童話般的美好日常。恐龍拉鍊包、口金包、捲軸杯套，點擊立即線上模擬你的專屬客製商品！">
+  <meta property="og:image" content="assets/story_illustration.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="星沐手作 Starmu Handmade">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://starmuhandmade.com/">
+  <meta property="twitter:title" content="星沐手作 | 童趣插畫風手作官方網站 & 線上訂購">
+  <meta property="twitter:description" content="用手作的溫度，編織童話般的美好日常。恐龍拉鍊包、口金包、捲軸杯套，點擊立即線上模擬你的專屬客製商品！">
+  <meta property="twitter:image" content="assets/story_illustration.png">
+
+  <!-- Favicon & Canonical -->
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="canonical" href="https://starmuhandmade.com/">
+  
+  <link rel="stylesheet" href="style.css">
+  <!-- FontAwesome for cute icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- --- Header & Navigation --- -->
+  <header>
+    <div class="container nav-container">
+      <a href="#home" class="logo-link" id="logo-nav">
+        <img src="assets/logo.png" alt="星沐手作 Logo" class="logo-img">
+        <span class="logo-text">星沐手作</span>
+      </a>
+      
+      <button class="menu-toggle-btn" id="menu-toggle" aria-label="切換選單">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li class="active"><a href="#home" data-tab="home">首頁</a></li>
+        <li><a href="#story" data-tab="story">星沐的故事</a></li>
+        <li><a href="#fabric" data-tab="fabric">手作職人攻略</a></li>
+        <li><a href="#products" data-tab="products">熱銷商品</a></li>
+        <li><a href="#simulator" data-tab="simulator">客製商品模擬</a></li>
+        <li><a href="#contact" data-tab="contact">聯繫我們</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="cart-toggle-btn" id="cart-toggle" aria-label="打開購物車">
+          <i class="fa-solid fa-shopping-basket"></i>
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- --- SPA Pages Container --- -->
+  <main class="container">
+
+    <!-- ==================== HOME PAGE ==================== -->
+    <section id="page-home" class="page-section active">
+      <div class="hero-wrapper">
+        <div class="hero-content fade-in-section visible">
+          <span class="hero-subtitle">🌸 童趣插畫風 & 清新韓系</span>
+          <h1>用手作的溫度<br>編織<span>童話般的美好</span></h1>
+          <p class="hero-desc">「星沐手作」為您帶來最溫柔的布藝日常。每一針每一線，都傾注了對生活的浪漫與熱愛，讓可愛小恐龍與花朵陪伴您的每一天。</p>
+          <div style="display:flex; gap:16px;">
+            <a href="#products" class="btn-cute btn-tab-trigger" data-target="products">探索熱銷商品 <i class="fa-solid fa-bag-shopping"></i></a>
+            <a href="#simulator" class="btn-cute btn-secondary btn-tab-trigger" data-target="simulator">客製商品模擬 <i class="fa-solid fa-palette"></i></a>
+          </div>
+        </div>
+        
+        <div class="hero-image-area fade-in-section visible delay-200">
+          <div class="hero-bg-blob"></div>
+          <img src="assets/logo.png" alt="Dinosaur Logo Character" class="hero-img">
+          <span class="deco-star deco-star-1"><i class="fa-solid fa-star"></i></span>
+          <span class="deco-star deco-star-2"><i class="fa-solid fa-star"></i></span>
+          <span class="deco-star deco-star-3"><i class="fa-solid fa-star"></i></span>
+        </div>
+      </div>
+
+      <!-- Homepage Hot Items (Home Popular Recommend) -->
+      <div class="home-hot-section fade-in-section">
+        <div class="section-title">
+          <h2>人氣推薦單品</h2>
+        </div>
+        <div class="hot-items-grid" id="home-hot-grid">
+          <!-- Dynamically populated in script.js -->
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+          <a href="#products" class="btn-cute btn-yellow btn-tab-trigger" data-target="products">查看所有商品 <i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== OUR STORY PAGE ==================== -->
+    <section id="page-story" class="page-section">
+      <div class="section-title fade-in-section">
+        <h2>星沐的故事</h2>
+      </div>
+      
+      <div class="story-grid">
+        <div class="story-text-card fade-in-section delay-100">
+          <h3>陪伴日常的溫暖星光</h3>
+          <p class="story-p">在寧靜的星空下，有一隻喜愛編織與手作的溫柔小恐龍，細心地收集每顆劃過天際的流星。牠將星光的溫度與輕柔的雲朵，化作一根根彩色的毛線與一幅幅童趣的印花布，這就是<strong>「星沐手作」</strong>的起點。</p>
+          <p class="story-p">我們深信，每件手作品都有牠專屬的靈魂。從挑選親膚透氣的日本/台灣布料，到反覆打版、裁剪、車縫，每一個動作都藏著職人最暖心的祝福。無論是實用的拉鍊收納包，還是承載環保理念的隨行杯套，我們都希望能在喧囂的日常中，為您帶來一份清新舒心的療癒感。</p>
+          <p class="story-p">讓「星沐手作」的布藝日常，像柔軟的星沐一樣包圍著你，陪你度過每個歡樂與溫暖的平凡時刻。🌸</p>
+        </div>
+        
+        <div class="story-illustration-area fade-in-section delay-200">
+          <div class="story-sticker-frame">
+            <img src="assets/story_illustration.png" alt="小恐龍編織故事圖" class="story-illustration">
+            <div class="story-caption">Dino's Dreamy Knitting Room</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FABRIC GUIDE PAGE ==================== -->
+    <section id="page-fabric" class="page-section">
+      <div class="section-title fade-in-section">
+        <h2>手作職人攻略</h2>
+      </div>
+      
+      <div class="fabric-grid" id="fabric-grid">
+        <!-- Fabric Cards (6 cards) -->
+        <div class="fabric-card fade-in-section delay-100">
+          <div class="fabric-icon"><i class="fa-solid fa-cloud"></i></div>
+          <h3 class="fabric-name">日本雙層二重紗</h3>
+          <p class="fabric-desc">由兩層極細純棉紗布交織而成，質地極致輕盈柔軟，吸水性與透氣度高，非常適合製作嬰兒用品與親膚口水巾。</p>
+          <div class="fabric-ratings">
+            <div class="rating-row"><span>柔軟親膚</span><span class="rating-stars">⭐⭐⭐⭐⭐</span></div>
+            <div class="rating-row"><span>吸水透氣</span><span class="rating-stars">⭐⭐⭐⭐⭐</span></div>
+            <div class="rating-row"><span>挺括耐磨</span><span class="rating-stars">⭐⭐</span></div>
+          </div>
+        </div>
+
+        <div class="fabric-card fade-in-section delay-200">
+          <div class="fabric-icon"><i class="fa-solid fa-feather-pointed"></i></div>
+          <h3 class="fabric-name">台灣精梳細棉布</h3>
+          <p class="fabric-desc">觸感平滑細緻，顏色飽和且圖案多元，具有適中的挺度。耐洗耐磨，是製作各類萬用袋、零錢包的完美首選。</p>
+          <div class="fabric-ratings">
+            <div class="rating-row"><span>柔軟親膚</span><span class="rating-stars">⭐⭐⭐⭐</span></div>
+            <div class="rating-row"><span>吸水透氣</span><span class="rating-stars">⭐⭐⭐⭐</span></div>
+            <div class="rating-row"><span>挺括耐磨</span><span class="rating-stars">⭐⭐⭐⭐</span></div>
+          </div>
+        </div>
+
+        <div class="fabric-card fade-in-section delay-300">
+          <div class="fabric-icon"><i class="fa-solid fa-palette"></i></div>
+          <h3 class="fabric-name">日本印花純棉布</h3>
+          <p class="fabric-desc">日本進口高端布料，工藝細緻、紋理密實。擁有豐富、精緻且極具藝術感的童趣插畫印花，風格極具質感。</p>
+          <div class="fabric-ratings">
+            <div class="rating-row"><span>柔軟親膚</span><span class="rating-stars">⭐⭐⭐⭐</span></div>
+            <div class="rating-row"><span>吸水透氣</span><span class="rating-stars">⭐⭐⭐⭐</span></div>
+            <div class="rating-row"><span>挺括耐磨</span><span class="rating-stars">⭐⭐⭐⭐⭐</span></div>
+          </div>
+        </div>
+
+        <div class="fabric-card fade-in-section delay-100">
+          <div class="fabric-icon"><i class="fa-solid fa-droplet-slash"></i></div>
+          <h3 class="fabric-name">防潑水尼龍印花布</h3>
+          <p class="fabric-desc">表面經過防潑水塗層處理，水滴不易滲透。防髒好清潔，輕拍即可抖落雨水，非常適合戶外杯套與餐具袋。</p>
+          <div class="fabric-ratings">
+            <div class="rating-row"><span>柔軟親膚</span><span class="rating-stars">⭐⭐</span></div>
+            <div class="rating-row"><span>吸水透氣</span><span class="rating-stars">⭐</span></div>
+            <div class="rating-row"><span>挺括耐磨</span><span class="rating-stars">⭐⭐⭐⭐⭐</span></div>
+          </div>
+        </div>
+
+        <div class="fabric-card fade-in-section delay-200">
+          <div class="fabric-icon"><i class="fa-solid fa-seedling"></i></div>
+          <h3 class="fabric-name">嚴選天然有機棉</h3>
+          <p class="fabric-desc">無化學漂白與染色染色，保留棉花最自然的米黃與小褐點。對肌膚零刺激，是過敏肌與新生兒最安心的陪伴。</p>
+          <div class="fabric-ratings">
+            <div class="rating-row"><span>柔軟親膚</span><span class="rating-stars">⭐⭐⭐⭐⭐</span></div>
+            <div class="rating-row"><span>吸水透氣</span><span class="rating-stars">⭐⭐⭐⭐</span></div>
+            <div class="rating-row"><span>挺括耐磨</span><span class="rating-stars">⭐⭐⭐</span></div>
+          </div>
+        </div>
+
+        <div class="fabric-card fade-in-section delay-300">
+          <div class="fabric-icon"><i class="fa-solid fa-mountain"></i></div>
+          <h3 class="fabric-name">厚磅水洗純帆布</h3>
+          <p class="fabric-desc">經過水洗工藝處理，帆布手感更加自然柔軟，不易縮水。厚實抗磨，具有復古顆粒感與高挺度，承重性極佳。</p>
+          <div class="fabric-ratings">
+            <div class="rating-row"><span>柔軟親膚</span><span class="rating-stars">⭐⭐</span></div>
+            <div class="rating-row"><span>吸水透氣</span><span class="rating-stars">⭐⭐</span></div>
+            <div class="rating-row"><span>挺括耐磨</span><span class="rating-stars">⭐⭐⭐⭐⭐</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== BEST SELLERS PAGE ==================== -->
+    <section id="page-products" class="page-section">
+      <div class="section-title fade-in-section">
+        <h2>熱銷商品</h2>
+      </div>
+      
+      <div class="catalog-layout">
+        <div class="catalog-grid" id="catalog-grid">
+          <!-- Dynamically populated in script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CUSTOM SIMULATOR PAGE ==================== -->
+    <section id="page-simulator" class="page-section">
+      <div class="section-title fade-in-section">
+        <h2>客製商品模擬</h2>
+      </div>
+      
+      <div class="simulator-layout">
+        <!-- Left Panel: SVG Live Preview -->
+        <div class="preview-panel fade-in-section delay-100">
+          <div class="preview-canvas-container">
+            <!-- DYNAMIC SVG FOR PREVIEW -->
+            <svg viewBox="0 0 400 400" class="simulator-svg-canvas" id="svg-canvas" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <!-- Pattern 1: Dinosaur Land -->
+                <pattern id="pat-dino" width="80" height="80" patternUnits="userSpaceOnUse">
+                  <rect width="80" height="80" fill="#EAF2E8" />
+                  <!-- Cute Dinosaur vector icons repeating -->
+                  <path d="M 25,25 Q 35,10 45,25 T 55,25 T 60,35 Q 55,45 40,45 T 20,40 Z" fill="#97C09E" />
+                  <circle cx="28" cy="22" r="2" fill="#5C4E4B" />
+                  <path d="M 20,20 L 25,18 L 22,23" stroke="#FFA3A3" stroke-width="1.5" stroke-linecap="round" fill="none" />
+                  <!-- Cute flowers and stars -->
+                  <circle cx="50" cy="50" r="3" fill="#FCD299" />
+                  <circle cx="60" cy="15" r="2.5" fill="#FFA3A3" />
+                  <path d="M 12,62 L 16,62 M 14,60 L 14,64" stroke="#FFF" stroke-width="1.5" stroke-linecap="round" />
+                  <circle cx="68" cy="65" r="4" fill="#94C3D4" />
+                </pattern>
+
+                <!-- Pattern 2: Candy Panda -->
+                <pattern id="pat-panda" width="80" height="80" patternUnits="userSpaceOnUse">
+                  <rect width="80" height="80" fill="#FFF5E1" />
+                  <!-- Repeating Panda Face -->
+                  <circle cx="35" cy="35" r="16" fill="#FFF" stroke="#5C4E4B" stroke-width="2" />
+                  <circle cx="21" cy="21" r="5.5" fill="#5C4E4B" />
+                  <circle cx="21" cy="21" r="2.5" fill="#FFF" />
+                  <circle cx="49" cy="21" r="5.5" fill="#5C4E4B" />
+                  <circle cx="49" cy="21" r="2.5" fill="#FFF" />
+                  <!-- Eyes -->
+                  <ellipse cx="29" cy="33" rx="3.5" ry="4.5" fill="#5C4E4B" />
+                  <circle cx="29" cy="32" r="1" fill="#FFF" />
+                  <ellipse cx="41" cy="33" rx="3.5" ry="4.5" fill="#5C4E4B" />
+                  <circle cx="41" cy="32" r="1" fill="#FFF" />
+                  <!-- Cheeks & Nose -->
+                  <circle cx="24" cy="37" r="2.5" fill="#FFB4B4" />
+                  <circle cx="46" cy="37" r="2.5" fill="#FFB4B4" />
+                  <polygon points="33,37 37,37 35,39" fill="#5C4E4B" />
+                  <!-- Lollipops & Dots -->
+                  <circle cx="15" cy="60" r="6" fill="#FFA3A3" />
+                  <path d="M 15,66 L 15,74" stroke="#5C4E4B" stroke-width="2" stroke-linecap="round" />
+                  <circle cx="65" cy="55" r="5" fill="#8DBDCF" />
+                  <path d="M 65,60 L 65,67" stroke="#5C4E4B" stroke-width="2" stroke-linecap="round" />
+                </pattern>
+
+                <!-- Pattern 3: Monet's Garden -->
+                <pattern id="pat-garden" width="100" height="100" patternUnits="userSpaceOnUse">
+                  <rect width="100" height="100" fill="#E8F4F8" />
+                  <!-- Watercolor Rose wash blobs -->
+                  <path d="M 30,30 Q 50,15 70,30 T 90,50 T 60,80 T 20,60 Z" fill="#B1D4E0" opacity="0.6" />
+                  <path d="M 50,45 Q 60,35 70,45 T 75,55 T 60,65 T 45,55 Z" fill="#C4ADDC" opacity="0.6" />
+                  <path d="M 15,15 Q 25,5 35,15 T 40,25 T 30,35 Z" fill="#FFA3A3" opacity="0.5" />
+                  <!-- Delicate Leaves -->
+                  <path d="M 45,70 Q 55,60 50,50 Q 40,60 45,70" fill="#97C09E" />
+                  <path d="M 78,32 Q 88,28 85,18 Q 75,22 78,32" fill="#97C09E" />
+                </pattern>
+
+                <!-- Pattern 4: Strawberry Party -->
+                <pattern id="pat-strawberry" width="70" height="70" patternUnits="userSpaceOnUse">
+                  <rect width="70" height="70" fill="#FFECEC" />
+                  <!-- Repeating Strawberry -->
+                  <path d="M 35,20 C 42,20 48,25 45,40 C 43,48 37,54 35,54 C 33,54 27,48 25,40 C 22,25 28,20 35,20 Z" fill="#FF7B7B" />
+                  <!-- Seeds -->
+                  <circle cx="31" cy="28" r="1" fill="#FFF5E1" />
+                  <circle cx="39" cy="28" r="1" fill="#FFF5E1" />
+                  <circle cx="35" cy="35" r="1" fill="#FFF5E1" />
+                  <circle cx="30" cy="42" r="1" fill="#FFF5E1" />
+                  <circle cx="40" cy="42" r="1" fill="#FFF5E1" />
+                  <!-- Cap -->
+                  <path d="M 35,22 L 31,16 L 35,19 L 39,16 Z" fill="#97C09E" />
+                  <!-- Small white flower -->
+                  <circle cx="55" cy="55" r="3" fill="#FFF" />
+                  <circle cx="51" cy="55" r="2" fill="#F7C887" />
+                  <circle cx="59" cy="55" r="2" fill="#F7C887" />
+                  <circle cx="55" cy="51" r="2" fill="#F7C887" />
+                  <circle cx="55" cy="59" r="2" fill="#F7C887" />
+                  <circle cx="55" cy="55" r="1.5" fill="#5C4E4B" />
+                </pattern>
+
+                <!-- Pattern 5: Yellow Balloon -->
+                <pattern id="pat-balloon" width="80" height="80" patternUnits="userSpaceOnUse">
+                  <rect width="80" height="80" fill="#FDFBF7" />
+                  <!-- Cute balloons -->
+                  <path d="M 30,30 C 30,18 50,18 50,30 C 50,40 43,45 40,48 C 37,45 30,40 30,30 Z" fill="#F7C887" />
+                  <path d="M 40,48 L 42,52 L 38,52 Z" fill="#FCD299" stroke="#5C4E4B" stroke-width="1.5" />
+                  <path d="M 40,52 Q 38,62 44,70" fill="none" stroke="#5C4E4B" stroke-width="1.5" stroke-linecap="round" />
+                  <!-- Yellow Flowers -->
+                  <circle cx="15" cy="15" r="3" fill="#FCD299" />
+                  <circle cx="15" cy="15" r="1" fill="#5C4E4B" />
+                  <circle cx="68" cy="62" r="3.5" fill="#FCD299" />
+                  <circle cx="68" cy="62" r="1.2" fill="#5C4E4B" />
+                  <!-- Clouds -->
+                  <path d="M 60,20 Q 65,15 70,20 Q 75,20 72,26 L 58,26 Z" fill="#FFF" />
+                </pattern>
+              </defs>
+
+              <!-- Main Interactive Group -->
+              <g id="svg-product-group">
+                <!-- Dynamically filled in script.js (either Pouch, Flap Pouch, Sleeve, or Bib) -->
+              </g>
+            </svg>
+          </div>
+          <div class="preview-tips">
+            <i class="fa-solid fa-magic-wand-style"></i> 模擬預覽圖僅供參考，實際成品均由手工裁剪，花色分佈會有些許不同喔！
+          </div>
+        </div>
+
+        <!-- Right Panel: Custom Options -->
+        <div class="controls-panel fade-in-section delay-200">
+          <div class="panel-title">
+            <h3>打造你的專屬布藝</h3>
+          </div>
+          
+          <!-- Control 1: Product Type -->
+          <div class="control-group">
+            <span class="control-label"><i class="fa-solid fa-shapes"></i> 1. 選擇商品種類</span>
+            <div class="options-grid" id="type-selector">
+              <button class="option-btn active" data-type="pouch">
+                <i class="fa-solid fa-wallet"></i> 萬用拉鍊包
+              </button>
+              <button class="option-btn" data-type="flappouch">
+                <i class="fa-solid fa-box-archive"></i> 彈片口金包
+              </button>
+              <button class="option-btn" data-type="cupsleeve">
+                <i class="fa-solid fa-mug-hot"></i> 隨行杯套
+              </button>
+              <button class="option-btn" data-type="babybib">
+                <i class="fa-solid fa-baby"></i> 寶寶口水巾
+              </button>
+            </div>
+          </div>
+
+          <!-- Control 2: Fabric Pattern -->
+          <div class="control-group">
+            <span class="control-label"><i class="fa-solid fa-scroll"></i> 2. 選擇布料花色</span>
+            <div class="options-grid" id="pattern-selector">
+              <button class="option-btn active" data-pattern="pat-dino">
+                <span class="swatch swatch-dino"></span> 恐龍樂園
+              </button>
+              <button class="option-btn" data-pattern="pat-panda">
+                <span class="swatch swatch-panda"></span> 糖果熊貓
+              </button>
+              <button class="option-btn" data-pattern="pat-garden">
+                <span class="swatch swatch-garden"></span> 莫內花園
+              </button>
+              <button class="option-btn" data-pattern="pat-strawberry">
+                <span class="swatch swatch-strawberry"></span> 草莓派對
+              </button>
+              <button class="option-btn" data-pattern="pat-balloon">
+                <span class="swatch swatch-balloon"></span> 小黃花氣球
+              </button>
+            </div>
+          </div>
+
+          <!-- Control 3: Accessories -->
+          <div class="control-group">
+            <span class="control-label"><i class="fa-solid fa-tags"></i> 3. 專屬加購配件</span>
+            <div class="options-flex" id="accessory-selector">
+              <button class="option-btn" data-acc="tag">
+                <i class="fa-regular fa-square-plus"></i> 星沐布標 (+NT$20)
+              </button>
+              <button class="option-btn" data-acc="strap">
+                <i class="fa-regular fa-square-plus"></i> 便攜提手帶 (+NT$40)
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom Cost Calculation & Add to Cart -->
+          <div style="border-top:2px dashed var(--border-color); padding-top:20px; margin-top:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+              <span style="font-weight:700; color:var(--text-light);">預估客製價格</span>
+              <span style="font-size:1.6rem; font-weight:900; color:#FF7B7B;" id="sim-price-display">NT$ 390</span>
+            </div>
+            <button class="btn-cute btn-large" id="btn-add-custom-cart">
+              加入購物車 <i class="fa-solid fa-cart-arrow-down"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACT US PAGE ==================== -->
+    <section id="page-contact" class="page-section">
+      <div class="section-title fade-in-section">
+        <h2>聯繫我們</h2>
+      </div>
+      
+      <div class="contact-wrapper">
+        <!-- Social accounts and basic shop info -->
+        <div class="contact-card-box fade-in-section delay-100">
+          <h3>關注星沐的最新日常</h3>
+          <p style="color:var(--text-light); font-weight:700;">歡迎隨時與我們聯絡，詢問客製細節、大量訂購或活動邀約喔！</p>
+          <div class="contact-list">
+            <a href="https://line.me/ti/p/~starmuhandmade" target="_blank" class="contact-item line">
+              <span class="contact-icon"><i class="fa-brands fa-line"></i></span>
+              官方 LINE ID: @starmu
+            </a>
+            <a href="https://instagram.com/starmuhandmade" target="_blank" class="contact-item ig">
+              <span class="contact-icon"><i class="fa-brands fa-instagram"></i></span>
+              Instagram: @starmuhandmade
+            </a>
+            <a href="https://facebook.com/starmuhandmade" target="_blank" class="contact-item fb">
+              <span class="contact-icon"><i class="fa-brands fa-facebook-f"></i></span>
+              Facebook: 星沐手作 Starmu
+            </a>
+            <a href="https://threads.net/@starmuhandmade" target="_blank" class="contact-item threads">
+              <span class="contact-icon"><i class="fa-brands fa-threads"></i></span>
+              Threads: @starmuhandmade
+            </a>
+          </div>
+        </div>
+
+        <!-- Cute contact message form -->
+        <form class="contact-form fade-in-section delay-200" id="contact-form" onsubmit="event.preventDefault();">
+          <h3>寫封信給小恐龍</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-name">您的名字</label>
+              <input type="text" id="contact-name" class="form-control" placeholder="怎麼稱呼您呢？" required>
+            </div>
+            <div class="form-group">
+              <label for="contact-phone">聯絡電話</label>
+              <input type="tel" id="contact-phone" class="form-control" placeholder="您的電話號碼">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="contact-email">電子信箱</label>
+            <input type="email" id="contact-email" class="form-control" placeholder="hello@starmu.com" required>
+          </div>
+          <div class="form-group">
+            <label for="contact-message">想對我們說的話 / 客製詢問</label>
+            <textarea id="contact-message" class="form-control" placeholder="例如：我想訂購寶寶彌月禮盒組..." required></textarea>
+          </div>
+          <button type="submit" class="btn-cute btn-form-submit" id="btn-submit-contact">
+            送出信件 <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- --- Footer & Social Quicklinks --- -->
+  <footer>
+    <div class="container footer-container">
+      <div class="footer-logo">
+        <img src="assets/logo.png" alt="星沐手作 Logo" class="footer-logo-img">
+        <span class="footer-logo-text">星沐手作</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#home" class="btn-tab-trigger" data-target="home">首頁</a></li>
+        <li><a href="#story" class="btn-tab-trigger" data-target="story">品牌故事</a></li>
+        <li><a href="#fabric" class="btn-tab-trigger" data-target="fabric">布料攻略</a></li>
+        <li><a href="#products" class="btn-tab-trigger" data-target="products">熱銷商品</a></li>
+        <li><a href="#simulator" class="btn-tab-trigger" data-target="simulator">客製模擬</a></li>
+        <li><a href="#contact" class="btn-tab-trigger" data-target="contact">聯繫我們</a></li>
+      </ul>
+      <div class="footer-socials">
+        <a href="https://line.me" target="_blank" class="social-circle-btn line" title="LINE"><i class="fa-brands fa-line"></i></a>
+        <a href="https://instagram.com" target="_blank" class="social-circle-btn ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://facebook.com" target="_blank" class="social-circle-btn fb" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="https://threads.net" target="_blank" class="social-circle-btn threads" title="Threads"><i class="fa-brands fa-threads"></i></a>
+      </div>
+      <div>
+        <p class="footer-copyright">&copy; 2026 星沐手作 Starmu Handmade. All Rights Reserved.</p>
+        <p class="footer-copyright" style="font-size: 0.72rem; margin-top:4px;">Handmade with 💖 in Taiwan</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- --- Sliding Shopping Cart Drawer --- -->
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h3>我的購物籃 🧺</h3>
+      <button class="cart-close-btn" id="cart-close" aria-label="關閉購物車"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="cart-body" id="cart-items-container">
+      <!-- Cart items loaded dynamically -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>小計金額</span>
+        <span class="cart-total-price" id="cart-total-display">NT$ 0</span>
+      </div>
+      <button class="btn-cute btn-large cart-checkout-btn" id="btn-checkout">
+        前往訂購 <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- --- Toast Notification Container --- -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- --- Core JS Script --- -->
+  <script src="script.js"></script>
+</body>
+</html>
