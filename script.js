@@ -3,40 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==================== PRODUCT DATA ====================
-  const PRODUCTS = [
-    {
-      id: 'prod-1',
-      name: '恐龍樂園雙層拉鍊包',
-      price: 390,
-      image: 'assets/product1.jpg',
-      desc: '經典黃色印花布搭配軟萌恐龍，雙層收納大空間。正面貼心透明膠片格層，附帶撞色手拎帶，實用又童趣。',
-      popular: true
-    },
-    {
-      id: 'prod-2',
-      name: '萌萌熊貓棉花糖彈片包',
-      price: 280,
-      image: 'assets/product2.jpg',
-      desc: '粉綠色調配上香甜棉花糖熊貓，搭配柔軟珊瑚粉口金翻蓋與撞色金屬按扣，輕壓即開，最適合收納零錢與耳機。',
-      popular: true
-    },
-    {
-      id: 'prod-3',
-      name: '莫內花園手感捲軸杯套',
-      price: 220,
-      image: 'assets/product3.jpg',
-      desc: '藍色夢幻水彩玫瑰如同印象派畫作，質地硬挺。收納時可如捲軸般輕巧捲起，側邊車縫精緻品牌布標。',
-      popular: true
-    },
-    {
-      id: 'prod-4',
-      name: '莫內花園隨行提帶杯套',
-      price: 250,
-      image: 'assets/product4.jpg',
-      desc: '莫內花園系列杯套完整展開版，附有專屬同花色加長調整型手提帶，提著走超方便，環保也能美美的！',
-      popular: false
-    }
-  ];
+  let PRODUCTS = [];
 
   // ==================== SIMULATOR STATE ====================
   let simulatorState = {
@@ -129,13 +96,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ==================== INITIALIZATION ====================
   function init() {
-    renderHotItems();
-    renderCatalog();
+    fetchProducts();
     updateCartUI();
     renderSimulatorSVG();
     setupRouting();
     setupScrollAnimations();
     checkLoginState();
+  }
+
+  function fetchProducts() {
+    fetch('get_products.php')
+      .then(res => res.json())
+      .then(data => {
+        PRODUCTS = data;
+        renderHotItems();
+        renderCatalog();
+      })
+      .catch(err => {
+        console.error('取得商品列表失敗', err);
+      });
   }
 
   // ==================== SPA ROUTING ====================

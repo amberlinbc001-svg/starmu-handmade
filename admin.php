@@ -53,6 +53,91 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
             $stmt->close();
         }
         ajax_respond(false, '無效的訂單編號。');
+
+    } elseif ($action === 'add_product') {
+        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+        $price = isset($_POST['price']) ? intval($_POST['price']) : 0;
+        $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+        $is_hot = isset($_POST['is_hot']) ? 1 : 0;
+
+        if (empty($name) || $price <= 0) {
+            $_SESSION['product_error'] = '商品名稱與價格為必填欄位！';
+            header('Location: admin.php?tab=products');
+            exit;
+        }
+
+        // Handle Image Upload
+        if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            $_SESSION['product_error'] = '請選擇要上傳的商品圖片！';
+            header('Location: admin.php?tab=products');
+            exit;
+        }
+
+        $file_name = $_FILES['image']['name'];
+        $file_tmp = $_FILES['image']['tmp_name'];
+        $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        $allowed_exts = ['jpg', 'jpeg', 'png', 'webp'];
+
+        if (!in_array($ext, $allowed_exts)) {
+            $_SESSION['product_error'] = '不支援的圖片格式！僅限 JPG, JPEG, PNG, WEBP。';
+            header('Location: admin.php?tab=products');
+            exit;
+        }
+
+        $uploads_dir = 'assets/uploads';
+        if (!is_dir($uploads_dir)) {
+            mkdir($uploads_dir, 0755, true);
+        }
+
+        $new_file_name = uniqid('prod_', true) . '.' . $ext;
+        $target_path = $uploads_dir . '/' . $new_file_name;
+
+        if (move_uploaded_file($file_tmp, $target_path)) {
+            $stmt = $conn->prepare("INSERT INTO `products` (`name`, `price`, `description`, `image_path`, `is_hot`) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sissi", $name, $price, $description, $target_path, $is_hot);
+            if ($stmt->execute()) {
+                $_SESSION['product_success'] = '商品上架成功！🎉';
+            } else {
+                $_SESSION['product_error'] = '寫入資料庫失敗：' . $stmt->error;
+            }
+            $stmt->close();
+        } else {
+            $_SESSION['product_error'] = '伺服器儲存圖片失敗！';
+        }
+
+        header('Location: admin.php?tab=products');
+        exit;
+
+    } elseif ($action === 'delete_product') {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $productId = isset($input['product_id']) ? intval($input['product_id']) : 0;
+
+        if ($productId > 0) {
+            // Get image path first to delete file if it's uploaded
+            $stmt_img = $conn->prepare("SELECT `image_path` FROM `products` WHERE `id` = ?");
+            $stmt_img->bind_param("i", $productId);
+            $stmt_img->execute();
+            $res_img = $stmt_img->get_result();
+            if ($res_img->num_rows === 1) {
+                $prod = $res_img->fetch_assoc();
+                $img_path = $prod['image_path'];
+                // Delete physical file only if it is in uploads folder (don't delete original assets)
+                if (strpos($img_path, 'assets/uploads/') === 0 && file_exists($img_path)) {
+                    @unlink($img_path);
+                }
+            }
+            $stmt_img->close();
+
+            $stmt = $conn->prepare("DELETE FROM `products` WHERE `id` = ?");
+            $stmt->bind_param("i", $productId);
+            if ($stmt->execute()) {
+                ajax_respond(true, '商品已成功刪除！');
+            } else {
+                ajax_respond(false, '刪除資料失敗。');
+            }
+            $stmt->close();
+        }
+        ajax_respond(false, '無效的商品編號。');
     }
 }
 
@@ -629,6 +714,125 @@ $is_authenticated = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logg
       50% { transform: translateY(-8px); }
       100% { transform: translateY(0px); }
     }
+    
+    /* Dashboard Tabs and Product management styles */
+    .dashboard-tabs {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 30px;
+      border-bottom: 3.5px solid var(--border-dark);
+      padding-bottom: 12px;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-light);
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 12px;
+      transition: var(--transition-smooth);
+    }
+    .tab-btn:hover {
+      color: var(--text-dark);
+    }
+    .tab-btn.active {
+      color: var(--text-dark);
+      background-color: var(--pastel-yellow);
+      border: 2.5px solid var(--border-dark);
+      box-shadow: 2px 2px 0 var(--border-dark);
+    }
+    
+    .dashboard-panel {
+      display: none;
+    }
+    .dashboard-panel.active {
+      display: block;
+    }
+    
+    .product-manage-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 30px;
+    }
+    
+    @media (max-width: 900px) {
+      .product-manage-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .product-form-card {
+      background-color: white;
+      border: 3.5px solid var(--border-dark);
+      border-radius: 30px;
+      padding: 28px;
+      box-shadow: var(--shadow-bubble);
+      align-self: start;
+    }
+    .product-form-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      border-left: 5px solid var(--pastel-pink-dark);
+      padding-left: 10px;
+    }
+    
+    .product-list-card {
+      background-color: white;
+      border: 3.5px solid var(--border-dark);
+      border-radius: 30px;
+      padding: 28px;
+      box-shadow: var(--shadow-bubble);
+    }
+    .product-list-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      border-left: 5px solid var(--pastel-blue-dark);
+      padding-left: 10px;
+    }
+    
+    /* Product list items */
+    .admin-product-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .admin-product-table th, .admin-product-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1.5px dashed var(--border-color);
+      vertical-align: middle;
+    }
+    .admin-product-table th {
+      font-weight: 700;
+      color: var(--text-light);
+    }
+    .admin-prod-thumb {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-dark);
+    }
+    
+    .alert-banner {
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .alert-banner.success {
+      background-color: var(--pastel-green);
+      border: 2px solid var(--pastel-green-dark);
+      color: #3b6b45;
+    }
+    .alert-banner.error {
+      background-color: #FFF2F2;
+      border: 2px solid #FF8D8D;
+      color: #D32F2F;
+    }
   </style>
 </head>
 <body>
@@ -680,9 +884,17 @@ $is_authenticated = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logg
   <?php else: ?>
     <!-- --- Admin Dashboard --- -->
     <main>
-      <div class="dashboard-title-row">
-        <h2>訂單管理面板 📋</h2>
+      <!-- Dashboard Sub-Navigation Tabs -->
+      <div class="dashboard-tabs">
+        <button class="tab-btn active" id="tab-orders-btn" onclick="switchDashboardTab('orders')"><i class="fa-solid fa-receipt"></i> 訂單管理</button>
+        <button class="tab-btn" id="tab-products-btn" onclick="switchDashboardTab('products')"><i class="fa-solid fa-box"></i> 商品管理與上架</button>
       </div>
+
+      <!-- Tab 1: Orders Management Panel -->
+      <div id="panel-orders" class="dashboard-panel active">
+        <div class="dashboard-title-row">
+          <h2>訂單管理面板 📋</h2>
+        </div>
 
       <!-- Filters -->
       <div class="filter-bar">
@@ -846,6 +1058,118 @@ $is_authenticated = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logg
             <p>小恐龍正在耐心等候顧客下單喔～</p>
           </div>
         <?php endif; ?>
+      </div> <!-- Close orders-list -->
+      </div> <!-- Close panel-orders -->
+
+      <!-- Tab 2: Products Management Panel -->
+      <div id="panel-products" class="dashboard-panel">
+        <div class="dashboard-title-row">
+          <h2>商品上架與管理面板 📋</h2>
+        </div>
+
+        <?php if (isset($_SESSION['product_success'])): ?>
+          <div class="alert-banner success">
+            <?php 
+              echo $_SESSION['product_success']; 
+              unset($_SESSION['product_success']);
+            ?>
+          </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['product_error'])): ?>
+          <div class="alert-banner error">
+            <?php 
+              echo $_SESSION['product_error']; 
+              unset($_SESSION['product_error']);
+            ?>
+          </div>
+        <?php endif; ?>
+
+        <div class="product-manage-layout">
+          <!-- Form Card -->
+          <div class="product-form-card">
+            <h3><i class="fa-solid fa-cloud-arrow-up"></i> 新增商品上架</h3>
+            <form action="admin.php?action=add_product" method="POST" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="prod-name">商品名稱 <span style="color:#FF7B7B;">*</span></label>
+                <input type="text" name="name" id="prod-name" class="form-control" placeholder="例如：寶寶親膚蝴蝶結圍兜" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="prod-price">商品售價 (NT$) <span style="color:#FF7B7B;">*</span></label>
+                <input type="number" name="price" id="prod-price" class="form-control" placeholder="例如：280" required min="1">
+              </div>
+              <div class="form-group">
+                <label for="prod-desc">商品特色描述</label>
+                <textarea name="description" id="prod-desc" class="form-control" placeholder="輸入商品材質、特色或客製化說明..." rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="prod-image">商品照片 <span style="color:#FF7B7B;">*</span></label>
+                <input type="file" name="image" id="prod-image" class="form-control" accept="image/*" required>
+                <span style="font-size:0.75rem; color:var(--text-light); display:block; margin-top:4px;">支援格式: JPG, PNG, WEBP</span>
+              </div>
+              <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" name="is_hot" id="prod-hot" style="width:18px; height:18px; cursor:pointer;">
+                <label for="prod-hot" style="margin-bottom:0; cursor:pointer; font-weight:700;">設為首頁熱銷人氣推薦</label>
+              </div>
+              <button type="submit" class="btn-cute btn-login" style="margin-top:10px;">
+                發佈上架 <i class="fa-solid fa-circle-check"></i>
+              </button>
+            </form>
+          </div>
+
+          <!-- List Card -->
+          <div class="product-list-card">
+            <h3><i class="fa-solid fa-boxes-stacked"></i> 現有商品列表</h3>
+            <div style="overflow-x:auto;">
+              <table class="admin-product-table">
+                <thead>
+                  <tr>
+                    <th style="width:70px;">縮圖</th>
+                    <th>商品名稱</th>
+                    <th style="width:90px;">價格</th>
+                    <th style="width:90px; text-align:center;">熱銷推薦</th>
+                    <th style="width:70px; text-align:center;">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  $p_sql = "SELECT id, name, price, image_path, is_hot FROM products ORDER BY id DESC";
+                  $p_res = $conn->query($p_sql);
+                  if ($p_res && $p_res->num_rows > 0):
+                    while ($prod = $p_res->fetch_assoc()):
+                  ?>
+                      <tr id="prod-row-<?php echo $prod['id']; ?>">
+                        <td>
+                          <img src="<?php echo htmlspecialchars($prod['image_path']); ?>" alt="product" class="admin-prod-thumb">
+                        </td>
+                        <td>
+                          <div style="font-weight:700;"><?php echo htmlspecialchars($prod['name']); ?></div>
+                        </td>
+                        <td>NT$ <?php echo $prod['price']; ?></td>
+                        <td style="text-align:center;">
+                          <?php echo $prod['is_hot'] == 1 ? '<span style="color:#FFA3A3;"><i class="fa-solid fa-fire"></i> 是</span>' : '<span style="color:var(--text-light);">否</span>'; ?>
+                        </td>
+                        <td style="text-align:center;">
+                          <button class="btn-cute btn-danger" style="padding:6px 10px; border-radius:10px;" onclick="deleteProduct(<?php echo $prod['id']; ?>)">
+                            <i class="fa-regular fa-trash-can"></i>
+                          </button>
+                        </td>
+                      </tr>
+                  <?php
+                    endwhile;
+                  else:
+                  ?>
+                    <tr>
+                      <td colspan="5" style="text-align:center; color:var(--text-light); padding:30px;">
+                        目前尚未上架任何商品。
+                      </td>
+                    </tr>
+                  <?php endif; ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
@@ -974,6 +1298,67 @@ $is_authenticated = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logg
           console.error(err);
           alert('❌ 網路連線異常，無法刪除訂單。');
         });
+      }
+
+      function switchDashboardTab(tabId) {
+        // Toggle active class on tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        const currentBtn = document.getElementById('tab-' + tabId + '-btn');
+        if (currentBtn) currentBtn.classList.add('active');
+
+        // Toggle active class on panels
+        document.querySelectorAll('.dashboard-panel').forEach(panel => {
+          panel.classList.remove('active');
+        });
+        const currentPanel = document.getElementById('panel-' + tabId);
+        if (currentPanel) currentPanel.classList.add('active');
+        
+        // Save current tab to URL query param without reloading
+        const url = new URL(window.location);
+        url.searchParams.set('tab', tabId);
+        window.history.pushState({}, '', url);
+      }
+
+      function deleteProduct(productId) {
+        if (!confirm('⚠️ 確定要刪除這項商品嗎？此動作將會從資料庫移除，且相關圖片檔案也會被刪除！')) return;
+
+        fetch('admin.php?action=delete_product', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            product_id: productId
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const row = document.getElementById('prod-row-' + productId);
+            if (row) {
+              row.style.opacity = '0';
+              setTimeout(() => {
+                row.remove();
+              }, 400);
+            }
+            alert('🗑️ ' + data.message);
+          } else {
+            alert('❌ 刪除失敗：' + data.message);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert('❌ 網路連線異常，無法刪除商品。');
+        });
+      }
+
+      // Check query param for tab on load
+      const urlParams = new URLSearchParams(window.location.search);
+      const activeTab = urlParams.get('tab');
+      if (activeTab === 'products') {
+        switchDashboardTab('products');
       }
     </script>
   <?php endif; ?>

@@ -121,4 +121,61 @@ if ($check_user->num_rows == 0) {
     $stmt->execute();
     $stmt->close();
 }
+
+// 10. Create "products" table if it doesn't exist
+$sql_products = "CREATE TABLE IF NOT EXISTS `products` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(150) NOT NULL,
+  `price` INT NOT NULL,
+  `description` TEXT,
+  `image_path` VARCHAR(255) NOT NULL,
+  `is_hot` TINYINT(1) DEFAULT 0,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+
+if (!$conn->query($sql_products)) {
+    die("建立 products 資料表失敗: " . $conn->error);
+}
+
+// 11. Seed Default Products if table is empty
+$check_products = $conn->query("SELECT * FROM `products` LIMIT 1");
+if ($check_products->num_rows == 0) {
+    $default_products = [
+        [
+            'name' => '恐龍樂園雙層拉鍊包',
+            'price' => 390,
+            'desc' => '經典黃色印花布搭配軟萌恐龍，雙層收納大空間。正面貼心透明膠片格層，附帶撞色手拎帶，實用又童趣。',
+            'image' => 'assets/product1.jpg',
+            'is_hot' => 1
+        ],
+        [
+            'name' => '萌萌熊貓棉花糖彈片包',
+            'price' => 280,
+            'desc' => '粉綠色調配上香甜棉花糖熊貓，搭配柔軟珊瑚粉口金翻蓋與撞色金屬按扣，輕壓即開，最適合收納零錢與耳機。',
+            'image' => 'assets/product2.jpg',
+            'is_hot' => 1
+        ],
+        [
+            'name' => '莫內花園手感捲軸杯套',
+            'price' => 220,
+            'desc' => '藍色夢幻水彩玫瑰如同印象派畫作，質地硬挺。收納時可如捲軸般輕巧捲起，側邊車縫精緻品牌布標。',
+            'image' => 'assets/product3.jpg',
+            'is_hot' => 1
+        ],
+        [
+            'name' => '莫內花園隨行提帶杯套',
+            'price' => 250,
+            'desc' => '莫內花園系列杯套完整展開版，附有專屬同花色加長調整型手提帶，提著走超方便，環保也能美美的！',
+            'image' => 'assets/product4.jpg',
+            'is_hot' => 0
+        ]
+    ];
+    
+    $stmt = $conn->prepare("INSERT INTO `products` (`name`, `price`, `description`, `image_path`, `is_hot`) VALUES (?, ?, ?, ?, ?)");
+    foreach ($default_products as $p) {
+        $stmt->bind_param("sissi", $p['name'], $p['price'], $p['desc'], $p['image'], $p['is_hot']);
+        $stmt->execute();
+    }
+    $stmt->close();
+}
 ?>
