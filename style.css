@@ -1441,6 +1441,237 @@ footer {
   }
 }
 
+/* --- Member Center Styles --- */
+.member-auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 480px;
+  margin: 40px auto;
+}
+
+.auth-toggle-buttons {
+  display: flex;
+  background-color: white;
+  border: 2.5px solid var(--border-dark);
+  border-radius: 20px;
+  padding: 4px;
+  width: 100%;
+}
+
+.auth-toggle-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  padding: 10px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.auth-toggle-btn.active {
+  background-color: var(--pastel-yellow);
+  box-shadow: 2px 2px 0 var(--border-dark);
+  border: 1.5px solid var(--border-dark);
+}
+
+.auth-card {
+  background-color: white;
+  border: 3px solid var(--border-dark);
+  border-radius: 30px;
+  padding: 30px;
+  width: 100%;
+  box-shadow: var(--shadow-bubble);
+}
+
+.auth-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Member profile panel styles */
+.member-profile-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.member-profile-header {
+  background-color: white;
+  border: 3px solid var(--border-dark);
+  border-radius: 30px;
+  padding: 24px;
+  box-shadow: var(--shadow-bubble);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.member-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--pastel-pink);
+  border: 2.5px solid var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--text-dark);
+  animation: float 3s ease-in-out infinite;
+}
+
+.member-welcome-info {
+  flex: 1;
+  min-width: 250px;
+}
+
+.member-welcome-info h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.member-welcome-info p {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  font-weight: 700;
+}
+
+.member-profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 30px;
+}
+
+@media (max-width: 900px) {
+  .member-profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-card, .profile-orders-card {
+  background-color: white;
+  border: 3px solid var(--border-dark);
+  border-radius: 30px;
+  padding: 28px;
+  box-shadow: var(--shadow-bubble);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-card h3, .profile-orders-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-bottom: 3.5px solid var(--border-dark);
+  padding-bottom: 12px;
+}
+
+.profile-details-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-details-list li {
+  font-size: 0.95rem;
+}
+
+.profile-details-list li strong {
+  color: var(--text-light);
+  margin-right: 4px;
+}
+
+/* User orders layout */
+.user-orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.user-order-item {
+  border: 2.5px solid var(--border-dark);
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--bg-cream);
+  transition: var(--transition-smooth);
+}
+
+.user-order-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0 var(--border-dark);
+}
+
+.user-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  border-bottom: 1.5px dashed var(--border-color);
+  padding-bottom: 8px;
+}
+
+.user-order-id {
+  font-weight: 700;
+}
+
+.user-order-date {
+  color: var(--text-light);
+}
+
+.user-order-detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.user-order-products {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-order-prod-name {
+  font-weight: 700;
+}
+
+.user-order-total {
+  font-weight: 700;
+}
+
+.user-order-total span {
+  color: #FF7B7B;
+}
+
+.user-order-status {
+  align-self: flex-start;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1.5px solid var(--border-dark);
+  border-radius: 8px;
+  padding: 2px 8px;
+}
+
 /* --- KEYFRAME ANIMATIONS --- */
 @keyframes pageFadeIn {
   from { opacity: 0; transform: translateY(15px); }

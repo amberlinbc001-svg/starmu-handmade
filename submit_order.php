@@ -2,6 +2,7 @@
 /* submit_order.php - 星沐手作 AJAX Order Submission Endpoint */
 
 header('Content-Type: application/json; charset=utf-8');
+session_start();
 
 // Require DB connection (auto-creates DB/tables if missing)
 require_once 'db.php';
@@ -48,12 +49,13 @@ $conn->begin_transaction();
 
 try {
     // 1. Insert into orders table
-    $stmt = $conn->prepare("INSERT INTO `orders` (`customer_name`, `customer_email`, `customer_phone`, `customer_message`, `total_price`) VALUES (?, ?, ?, ?, ?)");
+    $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+    $stmt = $conn->prepare("INSERT INTO `orders` (`user_id`, `customer_name`, `customer_email`, `customer_phone`, `customer_message`, `total_price`) VALUES (?, ?, ?, ?, ?, ?)");
     if (!$stmt) {
         throw new Exception("準備訂單 SQL 失敗: " . $conn->error);
     }
     
-    $stmt->bind_param("ssssi", $customerName, $customerEmail, $customerPhone, $customerMessage, $totalPrice);
+    $stmt->bind_param("issssi", $userId, $customerName, $customerEmail, $customerPhone, $customerMessage, $totalPrice);
     if (!$stmt->execute()) {
         throw new Exception("執行新增訂單失敗: " . $stmt->error);
     }

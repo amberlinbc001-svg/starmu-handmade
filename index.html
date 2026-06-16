@@ -59,6 +59,7 @@
         <li><a href="#products" data-tab="products">熱銷商品</a></li>
         <li><a href="#simulator" data-tab="simulator">客製商品模擬</a></li>
         <li><a href="#contact" data-tab="contact">聯繫我們</a></li>
+        <li><a href="#member" data-tab="member" id="nav-member-link">會員登入</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -468,6 +469,102 @@
       </div>
     </section>
 
+    <!-- ==================== MEMBER PAGE ==================== -->
+    <section id="page-member" class="page-section">
+      <!-- Non-logged in view: Login / Register card -->
+      <div id="member-guest-view" class="member-auth-container">
+        <!-- Toggle buttons -->
+        <div class="auth-toggle-buttons">
+          <button class="auth-toggle-btn active" id="btn-show-login">會員登入</button>
+          <button class="auth-toggle-btn" id="btn-show-register">加入會員</button>
+        </div>
+        
+        <!-- Login Card -->
+        <div class="auth-card" id="login-card-wrapper">
+          <h3 class="auth-card-title">歡迎回來！星沐會員 🦖</h3>
+          <form id="member-login-form" onsubmit="event.preventDefault();">
+            <div class="form-group">
+              <label for="login-username">會員帳號</label>
+              <input type="text" id="login-username" class="form-control" placeholder="請輸入帳號" required autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="login-password">密碼</label>
+              <input type="password" id="login-password" class="form-control" placeholder="請輸入密碼" required>
+            </div>
+            <button type="submit" class="btn-cute btn-large btn-form-submit">
+              立即登入 <i class="fa-solid fa-right-to-bracket"></i>
+            </button>
+          </form>
+        </div>
+        
+        <!-- Register Card -->
+        <div class="auth-card" id="register-card-wrapper" style="display:none;">
+          <h3 class="auth-card-title">加入會員！獲得專屬訂單追蹤 🌸</h3>
+          <form id="member-register-form" onsubmit="event.preventDefault();">
+            <div class="form-group">
+              <label for="register-username">常用帳號 <span style="color:#FF7B7B;">*</span></label>
+              <input type="text" id="register-username" class="form-control" placeholder="英文、數字組合" required autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="register-password">密碼 <span style="color:#FF7B7B;">*</span></label>
+              <input type="password" id="register-password" class="form-control" placeholder="請輸入密碼" required>
+            </div>
+            <div class="form-group">
+              <label for="register-email">電子信箱 <span style="color:#FF7B7B;">*</span></label>
+              <input type="email" id="register-email" class="form-control" placeholder="用於接收出貨明細" required>
+            </div>
+            <div class="form-group">
+              <label for="register-phone">聯絡電話 <span style="color:#FF7B7B;">*</span></label>
+              <input type="tel" id="register-phone" class="form-control" placeholder="用於收件聯絡" required>
+            </div>
+            <button type="submit" class="btn-cute btn-large btn-form-submit btn-secondary">
+              註冊會員 <i class="fa-solid fa-user-plus"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Logged-in view: Member Dashboard -->
+      <div id="member-profile-view" class="member-profile-container" style="display:none;">
+        <div class="member-profile-header">
+          <div class="member-avatar">
+            <i class="fa-solid fa-cookie-bite"></i>
+          </div>
+          <div class="member-welcome-info">
+            <h2>哈囉，<span id="display-username">星沐會員</span>！</h2>
+            <p>歡迎光臨星沐手作，點選「我的訂單」即可追蹤布製好物的狀態喔！</p>
+          </div>
+          <button class="btn-cute btn-danger" id="btn-member-logout">
+            登出會員 <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+        
+        <div class="member-profile-grid">
+          <!-- Profile details -->
+          <div class="profile-card">
+            <h3><i class="fa-solid fa-id-card"></i> 會員基本資料</h3>
+            <ul class="profile-details-list">
+              <li><strong>帳號名稱：</strong> <span id="info-username">-</span></li>
+              <li><strong>聯絡信箱：</strong> <span id="info-email">-</span></li>
+              <li><strong>聯絡電話：</strong> <span id="info-phone">-</span></li>
+            </ul>
+          </div>
+          
+          <!-- Customer Orders list -->
+          <div class="profile-orders-card">
+            <h3><i class="fa-solid fa-receipt"></i> 我的訂單記錄 (<span id="user-orders-count">0</span>)</h3>
+            <div class="user-orders-list" id="user-orders-container">
+              <!-- Orders dynamically loaded -->
+              <div class="empty-state">
+                <i class="fa-solid fa-receipt" style="font-size: 2.5rem; color:#D6C7C2; margin-bottom: 10px;"></i>
+                <p>目前尚無購買記錄喔～</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- --- Footer & Social Quicklinks --- -->
@@ -484,6 +581,7 @@
         <li><a href="#products" class="btn-tab-trigger" data-target="products">熱銷商品</a></li>
         <li><a href="#simulator" class="btn-tab-trigger" data-target="simulator">客製模擬</a></li>
         <li><a href="#contact" class="btn-tab-trigger" data-target="contact">聯繫我們</a></li>
+        <li><a href="#member" class="btn-tab-trigger" data-target="member" id="footer-member-link">會員登入</a></li>
       </ul>
       <div class="footer-socials">
         <a href="https://line.me" target="_blank" class="social-circle-btn line" title="LINE"><i class="fa-brands fa-line"></i></a>

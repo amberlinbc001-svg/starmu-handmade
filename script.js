@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ==================== SHOPPING CART STATE ====================
   let cart = [];
+  let currentUser = null;
 
   // Load cart from LocalStorage
   if (localStorage.getItem('starmu_cart')) {
@@ -106,6 +107,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const checkoutForm = document.getElementById('checkout-form');
   const checkoutTotalDisplay = document.getElementById('checkout-total-display');
 
+  // Member Center DOM Elements
+  const memberGuestView = document.getElementById('member-guest-view');
+  const memberProfileView = document.getElementById('member-profile-view');
+  const loginCardWrapper = document.getElementById('login-card-wrapper');
+  const registerCardWrapper = document.getElementById('register-card-wrapper');
+  const btnShowLogin = document.getElementById('btn-show-login');
+  const btnShowRegister = document.getElementById('btn-show-register');
+  const memberLoginForm = document.getElementById('member-login-form');
+  const memberRegisterForm = document.getElementById('member-register-form');
+  const btnMemberLogout = document.getElementById('btn-member-logout');
+  const displayUsername = document.getElementById('display-username');
+  const infoUsername = document.getElementById('info-username');
+  const infoEmail = document.getElementById('info-email');
+  const infoPhone = document.getElementById('info-phone');
+  const userOrdersCount = document.getElementById('user-orders-count');
+  const userOrdersContainer = document.getElementById('user-orders-container');
+  const navMemberLink = document.getElementById('nav-member-link');
+  const footerMemberLink = document.getElementById('footer-member-link');
+
 
   // ==================== INITIALIZATION ====================
   function init() {
@@ -115,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSimulatorSVG();
     setupRouting();
     setupScrollAnimations();
+    checkLoginState();
   }
 
   // ==================== SPA ROUTING ====================
@@ -483,6 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset form & close modal
         checkoutForm.reset();
         toggleCheckoutModal(false);
+        checkLoginState();
       } else {
         alert(`❌ 訂單送出失敗：\n\n${data.message}`);
       }
@@ -759,6 +781,254 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     svgGroup.innerHTML = svgContent;
+  }
+
+  // ==================== MEMBER CENTER LOGIC ====================
+
+  // Check login state from session on startup
+  function checkLoginState() {
+    fetch('user_auth.php?action=check')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.logged_in) {
+          currentUser = data.user;
+          updateAuthUI(true, data.user);
+          renderUserOrders(data.orders);
+        } else {
+          currentUser = null;
+          updateAuthUI(false);
+        }
+      })
+      .catch(err => {
+        console.error('檢查登入狀態失敗', err);
+        updateAuthUI(false);
+      });
+  }
+
+  // Toggle guest vs profile view
+  function updateAuthUI(isLoggedIn, user = null) {
+    if (isLoggedIn && user) {
+      memberGuestView.style.display = 'none';
+      memberProfileView.style.display = 'block';
+      displayUsername.textContent = user.username;
+      infoUsername.textContent = user.username;
+      infoEmail.textContent = user.email;
+      infoPhone.textContent = user.phone;
+      
+      // Update nav link labels
+      navMemberLink.innerHTML = '<i class="fa-solid fa-user-circle"></i> 會員中心';
+      footerMemberLink.innerHTML = '會員中心';
+      
+      // Auto-fill checkout fields if they exist
+      const checkoutNameInput = document.getElementById('checkout-name');
+      const checkoutEmailInput = document.getElementById('checkout-email');
+      const checkoutPhoneInput = document.getElementById('checkout-phone');
+      
+      if (checkoutNameInput) checkoutNameInput.value = user.username;
+      if (checkoutEmailInput) checkoutEmailInput.value = user.email;
+      if (checkoutPhoneInput) checkoutPhoneInput.value = user.phone;
+    } else {
+      memberGuestView.style.display = 'block';
+      memberProfileView.style.display = 'none';
+      
+      navMemberLink.innerHTML = '會員登入';
+      footerMemberLink.innerHTML = '會員登入';
+      
+      // Clear checkout fields auto-fill
+      const checkoutNameInput = document.getElementById('checkout-name');
+      const checkoutEmailInput = document.getElementById('checkout-email');
+      const checkoutPhoneInput = document.getElementById('checkout-phone');
+      if (checkoutNameInput) checkoutNameInput.value = '';
+      if (checkoutEmailInput) checkoutEmailInput.value = '';
+      if (checkoutPhoneInput) checkoutPhoneInput.value = '';
+    }
+  }
+
+  // Render order history in profile dashboard
+  function renderUserOrders(orders) {
+    userOrdersCount.textContent = orders.length;
+    if (!orders || orders.length === 0) {
+      userOrdersContainer.innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-receipt" style="font-size: 2.5rem; color:#D6C7C2; margin-bottom: 10px;"></i>
+          <p>目前尚無購買記錄喔～</p>
+        </div>
+      `;
+      return;
+    }
+
+    const status_zh = {
+      'pending': '待處理 ⏳',
+      'processing': '製作中 ✂️',
+      'shipped': '已出貨 🚚',
+      'completed': '已完成 🎉'
+    };
+
+    let html = '';
+    orders.forEach(order => {
+      let itemsListHtml = '';
+      order.items.forEach(item => {
+        let customText = '';
+        if (item.is_custom) {
+          const pattern_zh = {
+            'pat-dino': '綠色小恐龍 🦖',
+            'pat-panda': '棉花糖熊貓 🐼',
+            'pat-garden': '莫內花園 🌹',
+            'pat-strawberry': '香甜草莓 🍓',
+            'pat-balloon': '氣球雲朵 🎈'
+          };
+          const patName = pattern_zh[item.custom_pattern] || item.custom_pattern;
+          
+          let accText = '';
+          if (item.custom_accessories) {
+            const acc_zh = {
+              'tag': '手作布標 🏷️',
+              'strap': '同款加長手提帶 🎗️'
+            };
+            const accs = item.custom_accessories.split(', ');
+            const accsZh = accs.map(a => acc_zh[a] || a).join(', ');
+            accText = `<br>• 配件: ${accsZh}`;
+          }
+          customText = `<div style="font-size:0.75rem; color:var(--text-light); margin-left: 10px;">• 花色: ${patName}${accText}</div>`;
+        }
+        itemsListHtml += `
+          <div class="user-order-detail-row">
+            <div class="user-order-products">
+              <span class="user-order-prod-name">${item.product_name} x ${item.qty}</span>
+              ${customText}
+            </div>
+            <span class="user-order-total">NT$ ${item.price * item.qty}</span>
+          </div>
+        `;
+      });
+
+      html += `
+        <div class="user-order-item">
+          <div class="user-order-header">
+            <span class="user-order-id">訂單編號 #${order.id}</span>
+            <span class="user-order-date">${order.created_at}</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            ${itemsListHtml}
+          </div>
+          <div class="user-order-header" style="border:none; padding-top:8px; margin-top:4px;">
+            <span class="user-order-status status-${order.status}">
+              ${status_zh[order.status] || order.status}
+            </span>
+            <span class="user-order-total" style="font-size:1.05rem;">總計: <span>NT$ ${order.total_price}</span></span>
+          </div>
+        </div>
+      `;
+    });
+
+    userOrdersContainer.innerHTML = html;
+  }
+
+  // Toggle Login/Register Panels
+  if (btnShowLogin && btnShowRegister) {
+    btnShowLogin.addEventListener('click', () => {
+      btnShowLogin.classList.add('active');
+      btnShowRegister.classList.remove('active');
+      loginCardWrapper.style.display = 'block';
+      registerCardWrapper.style.display = 'none';
+    });
+
+    btnShowRegister.addEventListener('click', () => {
+      btnShowRegister.classList.add('active');
+      btnShowLogin.classList.remove('active');
+      registerCardWrapper.style.display = 'block';
+      loginCardWrapper.style.display = 'none';
+    });
+  }
+
+  // Bind forms submit
+  if (memberLoginForm) {
+    memberLoginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const u = document.getElementById('login-username').value;
+      const p = document.getElementById('login-password').value;
+
+      fetch('user_auth.php?action=login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('🎉 登入成功！');
+          memberLoginForm.reset();
+          checkLoginState();
+        } else {
+          alert('❌ 登入失敗：' + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('❌ 網路連線異常，請稍後再試。');
+      });
+    });
+  }
+
+  if (memberRegisterForm) {
+    memberRegisterForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const u = document.getElementById('register-username').value;
+      const p = document.getElementById('register-password').value;
+      const em = document.getElementById('register-email').value;
+      const ph = document.getElementById('register-phone').value;
+
+      fetch('user_auth.php?action=register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p, email: em, phone: ph })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('🎉 會員帳號註冊成功！已為您自動登入～');
+          memberRegisterForm.reset();
+          
+          // Switch tab view back to login toggler
+          btnShowLogin.classList.add('active');
+          btnShowRegister.classList.remove('active');
+          loginCardWrapper.style.display = 'block';
+          registerCardWrapper.style.display = 'none';
+          
+          checkLoginState();
+        } else {
+          alert('❌ 註冊失敗：' + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('❌ 網路連線異常，請稍後再試。');
+      });
+    });
+  }
+
+  // Bind Logout
+  if (btnMemberLogout) {
+    btnMemberLogout.addEventListener('click', () => {
+      if (!confirm('確定要登出會員嗎？ 🥺')) return;
+      fetch('user_auth.php?action=logout')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            alert('👋 已登出會員，期待您下次光臨！');
+            currentUser = null;
+            updateAuthUI(false);
+            
+            // Switch back to home page tab
+            switchTab('home');
+            window.location.hash = 'home';
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert('❌ 網路連線異常，無法登出。');
+        });
+    });
   }
 
   // ==================== RUN APPLICATION ====================
