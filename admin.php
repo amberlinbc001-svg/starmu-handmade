@@ -11,7 +11,7 @@ function ajax_respond($success, $message) {
 }
 
 // 1. Handle AJAX Status Update and Order Deletion
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] !== 'login') {
     // Check authentication for AJAX requests
     if (!isset($_SESSION['admin_logged_in']) || !$_SESSION['admin_logged_in']) {
         header('Content-Type: application/json');
