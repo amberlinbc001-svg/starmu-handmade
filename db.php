@@ -6,22 +6,25 @@ $username = "root";
 $password = "";
 $dbname = "starmu_db";
 
-// 1. Connect to MySQL server
-$conn = new mysqli($host, $username, $password);
+// 1. Connect to MySQL server (smart connection)
+$conn = @new mysqli($host, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-    die("資料庫連線失敗: " . $conn->connect_error);
+    // If connection fails, try to create database (only if running on localhost / XAMPP)
+    if ($host === 'localhost' || $host === '127.0.0.1') {
+        $temp_conn = @new mysqli($host, $username, $password);
+        if (!$temp_conn->connect_error) {
+            $temp_conn->query("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $temp_conn->close();
+            
+            // Try connecting to database again
+            $conn = @new mysqli($host, $username, $password, $dbname);
+        }
+    }
 }
 
-// 2. Create database if it doesn't exist
-$sql_db = "CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
-if (!$conn->query($sql_db)) {
-    die("建立資料庫失敗: " . $conn->error);
-}
-
-// 3. Select the database
-if (!$conn->select_db($dbname)) {
-    die("選擇資料庫失敗: " . $conn->error);
+if ($conn->connect_error) {
+    die("資料庫連線失敗: " . $conn->connect_error . "。請確認 db.php 中的資料庫主機、帳號、密碼與資料庫名稱設定是否正確！");
 }
 
 // Set connection charset to utf8mb4
